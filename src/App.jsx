@@ -1,7 +1,5 @@
 import Feature from './components/Feature/Feature';
-import Footer from './components/Footer/Footer';
 import Hero from './components/Hero/Hero';
-import Navigation from './components/Navigation/Navigation';
 import chatIcon from './img/icon-chat.png';
 import moneyIcon from './img/icon-money.png';
 import securityIcon from './img/icon-security.png';
@@ -27,25 +25,21 @@ function App() {
   ];
 
   return (
-    <div>
-      <Navigation />
-      <main className={styles.main}>
-        <Hero />
-        <section className={styles.features}>
-          <h2 className={styles['sr-only']}>Features</h2>
-          {data.map((feature) => (
-            <Feature
-              title={feature[0]}
-              text={feature[1]}
-              image={feature[2]}
-              imageAltText={feature[3]}
-              key={feature[4]}
-            />
-          ))}
-        </section>
-      </main>
-      <Footer />
-    </div>
+    <main className="main">
+      <Hero />
+      <section className={styles.features}>
+        <h2 className="sr-only">Features</h2>
+        {data.map((feature) => (
+          <Feature
+            title={feature[0]}
+            text={feature[1]}
+            image={feature[2]}
+            imageAltText={feature[3]}
+            key={feature[4]}
+          />
+        ))}
+      </section>
+    </main>
   );
 }
 
