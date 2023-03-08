@@ -1,0 +1,15 @@
+.error {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100vh;
+  padding: 0 5rem;
+}
+
+.text {
+  color: #2c3e50;
+}
+
+.text:hover {
+  color: #4c6d8d;
+}
