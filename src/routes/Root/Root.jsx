@@ -5,7 +5,7 @@ import Navigation from '../../components/Navigation/Navigation';
 export default function Root() {
   return (
     <>
-      <Navigation loggedIn={false} />
+      <Navigation />
       <Outlet />
       <Footer />
     </>

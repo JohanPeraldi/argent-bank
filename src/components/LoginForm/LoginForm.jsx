@@ -1,28 +1,35 @@
-import { NavLink } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../../features/login/loginSlice';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
+  const loggedIn = useSelector((state) => state.login.loggedIn);
+  const dispatch = useDispatch();
+
   return (
     <form>
       <div className={styles['input-wrapper']}>
-        <label for="username">Username</label>
+        <label htmlFor="username">Username</label>
         <input type="text" id="username" />
       </div>
       <div className={styles['input-wrapper']}>
-        <label for="password">Password</label>
+        <label htmlFor="password">Password</label>
         <input type="password" id="password" />
       </div>
       <div className={styles['input-remember']}>
         <input type="checkbox" id="remember-me" />
-        <label for="remember-me">Remember me</label>
+        <label htmlFor="remember-me">Remember me</label>
       </div>
-      {/* <!-- PLACEHOLDER DUE TO STATIC SITE --> */}
-      <NavLink to="/user" className={styles['sign-in-button']}>
-        Sign In
-      </NavLink>
-      {/* <!-- SHOULD BE THE BUTTON BELOW -->
-          <!-- <button className={styles['sign-in-button']}>Sign In</button> -->
-          <!--  --> */}
+      {!loggedIn && (
+        <button
+          className={styles['sign-in-button']}
+          onClick={() => dispatch(login())}
+        >
+          <Link to="/user">Sign In</Link>
+        </button>
+      )}
     </form>
   );
 }
