@@ -5,9 +5,9 @@ import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './app/store';
 import ErrorPage from './routes/ErrorPage/ErrorPage';
+import Login from './routes/Login/Login';
+import Profile from './routes/Profile/Profile';
 import Root from './routes/Root/Root';
-import SignIn from './routes/SignIn/SignIn';
-import User from './routes/User/User';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -21,12 +21,12 @@ const router = createBrowserRouter([
         element: <App />,
       },
       {
-        path: 'sign-in',
-        element: <SignIn />,
+        path: 'login',
+        element: <Login />,
       },
       {
-        path: 'user',
-        element: <User />,
+        path: 'profile',
+        element: <Profile />, // protéger cette route <Authentification><Profile /></Authentification>
       },
     ],
   },

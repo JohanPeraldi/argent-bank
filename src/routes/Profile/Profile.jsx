@@ -1,5 +1,5 @@
 import Account from '../../components/Account/Account';
-import styles from './User.module.css';
+import styles from './Profile.module.css';
 
 export default function User() {
   const checkingAccountTitle = 'Argent Bank Checking (x8349)';

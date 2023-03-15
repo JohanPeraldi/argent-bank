@@ -1,7 +1,7 @@
 import LoginForm from '../../components/LoginForm/LoginForm';
-import styles from './SignIn.module.css';
+import styles from './Login.module.css';
 
-export default function SignIn() {
+export default function Login() {
   return (
     <main className="main bg-dark">
       <section className={styles['sign-in-content']}>

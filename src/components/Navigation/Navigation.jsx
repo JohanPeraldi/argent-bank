@@ -21,7 +21,7 @@ export default function Navigation() {
       </Link>
       <div>
         {!loggedIn && (
-          <Link to="sign-in" className={styles['main-nav-item']}>
+          <Link to="login" className={styles['main-nav-item']}>
             <i className="fa fa-user-circle"></i>
             Sign In
           </Link>
@@ -32,7 +32,7 @@ export default function Navigation() {
             className={styles['main-nav-item']}
             onClick={() => dispatch(logout())}
           >
-            <i class="fa fa-sign-out"></i>
+            <i className="fa fa-sign-out"></i>
             Sign Out
           </Link>
         )}

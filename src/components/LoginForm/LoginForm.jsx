@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login } from '../../features/login/loginSlice';
 import styles from './LoginForm.module.css';
@@ -27,7 +26,7 @@ export default function LoginForm() {
           className={styles['sign-in-button']}
           onClick={() => dispatch(login())}
         >
-          <Link to="/user">Sign In</Link>
+          Sign In
         </button>
       )}
     </form>
