@@ -51,8 +51,10 @@
   border-radius: 5px;
 }
 
-.input-invalid::placeholder,
-.input-invalid:hover::placeholder,
-.input-invalid:active::placeholder {
+.error {
+  margin: 0.5rem 0 0;
+  line-height: 1.2;
+  font-size: 1rem;
+  font-weight: 500;
   color: red;
 }

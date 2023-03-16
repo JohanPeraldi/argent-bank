@@ -9,19 +9,27 @@ export default function LoginForm() {
   // Username and password values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // Validity of username and password values
-  // (only reject empty fields, but may be further restricted)
-  const [usernameIsValid, setUsernameIsValid] = useState(false);
-  const [passwordIsValid, setPasswordIsValid] = useState(false);
   // Have input fields been entered and exited by user (blur event)?
   const [usernameInputEntered, setUsernameInputEntered] = useState(false);
   const [passwordInputEntered, setPasswordInputEntered] = useState(false);
+  // Validity of username and password values (only reject empty field for username
+  // and passwords with less than 8 characters, but may be further restricted)
+  const usernameIsValid = username.trim() !== '';
+  const passwordIsValid = password.trim().length > 7;
+  // Error message should only be displayed if input box has received
+  // and lost focus (blur event) without user providing a valid value
+  const displayUsernameInputErrorMessage =
+    !usernameIsValid && usernameInputEntered;
+  const displayPasswordInputErrorMessage =
+    !passwordIsValid && passwordInputEntered;
   // Dynamic className depending on both input validity
   // and input field being entered and left (blur event)
-  const usernameInputClassName =
-    usernameIsValid || !usernameInputEntered ? '' : 'input-invalid';
-  const passwordInputClassName =
-    passwordIsValid || !passwordInputEntered ? '' : 'input-invalid';
+  const usernameInputClassName = displayUsernameInputErrorMessage
+    ? 'input-invalid'
+    : '';
+  const passwordInputClassName = displayPasswordInputErrorMessage
+    ? 'input-invalid'
+    : '';
   // Form validity (false by default, true if both inputs are valid)
   let formIsValid = false;
   if (usernameIsValid && passwordIsValid) {
@@ -29,27 +37,19 @@ export default function LoginForm() {
   }
   // Event handler functions
   const inputChangeHandler = (event) => {
-    if (event.target.value.trim() === '') return;
     if (event.target.type === 'text') {
-      setUsernameIsValid(true);
       setUsername(event.target.value);
     }
     if (event.target.type === 'password') {
-      setPasswordIsValid(true);
       setPassword(event.target.value);
     }
   };
   const inputBlurHandler = (event) => {
-    if (event.target.value.trim() === '') {
-      if (event.target.type === 'text') {
-        setUsernameIsValid(false);
-        setUsernameInputEntered(true);
-      }
-      if (event.target.type === 'password') {
-        setPasswordIsValid(false);
-        setPasswordInputEntered(true);
-      }
-      event.target.placeholder = 'Field cannot be empty!';
+    if (event.target.type === 'text') {
+      setUsernameInputEntered(true);
+    }
+    if (event.target.type === 'password') {
+      setPasswordInputEntered(true);
     }
   };
   const formSubmissionHandler = (event) => {
@@ -58,7 +58,11 @@ export default function LoginForm() {
       // submit form
       console.log('Username: ', username);
       console.log('Password: ', password);
-    } else return;
+      setUsername('');
+      setPassword('');
+      setUsernameInputEntered(false);
+      setPasswordInputEntered(false);
+    }
   };
 
   return (
@@ -71,7 +75,11 @@ export default function LoginForm() {
           className={styles[usernameInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
+          value={username}
         />
+        {displayUsernameInputErrorMessage && (
+          <p className={styles.error}>Username field cannot be empty!</p>
+        )}
       </div>
       <div className={styles['input-wrapper']}>
         <label htmlFor="password">Password</label>
@@ -81,7 +89,13 @@ export default function LoginForm() {
           className={styles[passwordInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
+          value={password}
         />
+        {displayPasswordInputErrorMessage && (
+          <p className={styles.error}>
+            Password should be at least 8 characters long!
+          </p>
+        )}
       </div>
       <div className={styles['input-remember']}>
         <input type="checkbox" id="remember-me" />
