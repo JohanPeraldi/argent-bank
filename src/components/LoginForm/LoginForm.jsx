@@ -8,14 +8,20 @@ export default function LoginForm() {
   // const dispatch = useDispatch();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const usernameInputChangeHandler = (event) => {
-    setUsername(event.target.value);
-  };
-  const passwordInputChangeHandler = (event) => {
-    setPassword(event.target.value);
+  const inputChangeHandler = (event) => {
+    if (event.target.type === 'text') {
+      setUsername(event.target.value);
+    }
+    if (event.target.type === 'password') {
+      setPassword(event.target.value);
+    }
   };
   const formSubmissionHandler = (event) => {
     event.preventDefault();
+
+    if (username.trim() === '' || password.trim() === '') {
+      return;
+    }
 
     console.log('Username: ', username);
     console.log('Password: ', password);
@@ -25,19 +31,11 @@ export default function LoginForm() {
     <form onSubmit={formSubmissionHandler}>
       <div className={styles['input-wrapper']}>
         <label htmlFor="username">Username</label>
-        <input
-          type="text"
-          id="username"
-          onChange={usernameInputChangeHandler}
-        />
+        <input type="text" id="username" onChange={inputChangeHandler} />
       </div>
       <div className={styles['input-wrapper']}>
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          onChange={passwordInputChangeHandler}
-        />
+        <input type="password" id="password" onChange={inputChangeHandler} />
       </div>
       <div className={styles['input-remember']}>
         <input type="checkbox" id="remember-me" />
