@@ -10,6 +10,15 @@
   color: #fff;
 }
 
+.sign-in-button:disabled,
+.sign-in-button:disabled:hover,
+.sign-in-button:disabled:active {
+  background-color: #ccc;
+  color: #2c3e50;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
 .input-remember {
   display: flex;
 }
@@ -32,4 +41,18 @@
 .input-wrapper input {
   padding: 5px;
   font-size: 1.2rem;
+}
+
+.input-invalid,
+.input-invalid:hover,
+.input-invalid:active {
+  background-color: #ffc1c1;
+  border-color: red;
+  border-radius: 5px;
+}
+
+.input-invalid::placeholder,
+.input-invalid:hover::placeholder,
+.input-invalid:active::placeholder {
+  color: red;
 }
