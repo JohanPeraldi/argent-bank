@@ -1,3 +1,4 @@
+import { getUserData } from '../../api/api';
 import Account from '../../components/Account/Account';
 import styles from './Profile.module.css';
 
@@ -21,6 +22,22 @@ export default function User() {
     [savingsAccountTitle, savingsAccountBalance, savingsAccountDescription, 2],
     [creditCardTitle, creditCardBalance, creditCardDescription, 3],
   ];
+
+  const testUser1 = {
+    email: 'tony@stark.com',
+    password: 'password123',
+  };
+  const testUser2 = {
+    email: 'steve@rogers.com',
+    password: 'password456',
+  };
+  const testUser3 = {
+    email: 'toto@squillaci.it',
+    password: 'supersecurepass',
+  };
+  getUserData(testUser1);
+  getUserData(testUser2);
+  getUserData(testUser3);
 
   return (
     <main className="main bg-dark">
