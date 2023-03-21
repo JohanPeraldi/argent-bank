@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './app/store';
 import ErrorPage from './routes/ErrorPage/ErrorPage';
-import Login from './routes/Login/Login';
+import Login, { action as loginAction } from './routes/Login/Login';
 import Profile from './routes/Profile/Profile';
 import Root from './routes/Root/Root';
 import './index.css';
@@ -23,6 +23,7 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
+        action: loginAction,
       },
       {
         path: 'profile',

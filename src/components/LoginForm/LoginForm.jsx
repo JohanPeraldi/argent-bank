@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector /* useDispatch */ } from 'react-redux';
-// import { login } from '../../features/login/loginSlice';
+import { Form } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserData } from '../../api/api';
+import { login } from '../../features/login/loginSlice';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   // Username and password values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -55,23 +57,43 @@ export default function LoginForm() {
   const formSubmissionHandler = (event) => {
     event.preventDefault();
     if (formIsValid) {
-      // submit form
+      // API call with user's entered credentials
+      const userCredentials = {
+        email: username,
+        password: password,
+      };
+      getUserData(userCredentials).then(verifyCredentials());
       console.log('Username: ', username);
       console.log('Password: ', password);
+      // Verify credentials and either
+      // 1. If entered credentials are valid, redirect user to his account details or
+      // 2. If entered credentials are invalid, display message to that effect
+
+      // Empty input fields
       setUsername('');
       setPassword('');
+      // Reset user interaction history with input fields (back to false)
       setUsernameInputEntered(false);
       setPasswordInputEntered(false);
     }
   };
+  const verifyCredentials = () => {
+    if (window.localStorage.getItem('Token')) {
+      console.log('There is a token stored in localStorage');
+    } else {
+      console.log('No token stored in localStorage!');
+    }
+  };
 
   return (
-    <form onSubmit={formSubmissionHandler}>
+    <Form method="post" onSubmit={formSubmissionHandler}>
       <div className={styles['input-wrapper']}>
         <label htmlFor="username">Username</label>
         <input
           type="text"
           id="username"
+          name="username"
+          required
           className={styles[usernameInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
@@ -86,6 +108,8 @@ export default function LoginForm() {
         <input
           type="password"
           id="password"
+          name="password"
+          required
           className={styles[passwordInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
@@ -105,11 +129,11 @@ export default function LoginForm() {
         <button
           className={styles['sign-in-button']}
           disabled={!formIsValid}
-          // onClick={() => dispatch(login())}
+          onClick={() => dispatch(login())}
         >
           Sign In
         </button>
       )}
-    </form>
+    </Form>
   );
 }

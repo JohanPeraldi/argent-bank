@@ -1,8 +1,12 @@
+import { useEffect } from 'react';
 import { getUserData } from '../../api/api';
 import Account from '../../components/Account/Account';
 import styles from './Profile.module.css';
 
-export default function User() {
+export default function Profile() {
+  useEffect(() => {
+    document.title = 'Argent Bank - Profile';
+  }, []);
   const checkingAccountTitle = 'Argent Bank Checking (x8349)';
   const checkingAccountBalance = '$2,082.79';
   const checkingAccountDescription = 'Available Balance';

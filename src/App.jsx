@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import Feature from './components/Feature/Feature';
 import Hero from './components/Hero/Hero';
 import chatIcon from './img/icon-chat.png';
@@ -6,6 +7,9 @@ import securityIcon from './img/icon-security.png';
 import styles from './App.module.css';
 
 function App() {
+  useEffect(() => {
+    document.title = 'Argent Bank - Home Page';
+  }, []);
   const firstFeatureText =
     'Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes.';
   const firstFeatureTitle = 'You are our #1 priority';
