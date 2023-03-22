@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getUserData } from '../../api/api';
+import { sendCredentials } from '../../api/api';
 import Account from '../../components/Account/Account';
 import styles from './Profile.module.css';
 
@@ -39,9 +39,9 @@ export default function Profile() {
     email: 'toto@squillaci.it',
     password: 'supersecurepass',
   };
-  getUserData(testUser1);
-  getUserData(testUser2);
-  getUserData(testUser3);
+  sendCredentials(testUser1);
+  sendCredentials(testUser2);
+  sendCredentials(testUser3);
 
   return (
     <main className="main bg-dark">

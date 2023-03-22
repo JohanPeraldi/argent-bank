@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Form } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserData } from '../../api/api';
+import { sendCredentials } from '../../api/api';
 import { login } from '../../features/login/loginSlice';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // Username and password values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -24,6 +25,11 @@ export default function LoginForm() {
     !usernameIsValid && usernameInputEntered;
   const displayPasswordInputErrorMessage =
     !passwordIsValid && passwordInputEntered;
+  // Invalid credentials error message
+  const [
+    displayInvalidCredentialsMessage,
+    setDisplayInvalidCredentialsMessage,
+  ] = useState(false);
   // Dynamic className depending on both input validity
   // and input field being entered and left (blur event)
   const usernameInputClassName = displayUsernameInputErrorMessage
@@ -54,21 +60,28 @@ export default function LoginForm() {
       setPasswordInputEntered(true);
     }
   };
-  const formSubmissionHandler = (event) => {
+  const formSubmissionHandler = async (event) => {
     event.preventDefault();
     if (formIsValid) {
-      // API call with user's entered credentials
-      const userCredentials = {
-        email: username,
-        password: password,
-      };
-      getUserData(userCredentials).then(verifyCredentials());
       console.log('Username: ', username);
       console.log('Password: ', password);
-      // Verify credentials and either
-      // 1. If entered credentials are valid, redirect user to his account details or
-      // 2. If entered credentials are invalid, display message to that effect
-
+      // API call with user's entered credentials
+      const response = await sendCredentials({
+        email: username,
+        password: password,
+      });
+      if (response.status === 200) {
+        const { token } = response.data.body;
+        window.localStorage.setItem('Token', JSON.stringify(token));
+        console.log('Token: ', token);
+        dispatch(login());
+        navigate('/profile');
+      }
+      if (response.status === 400) {
+        console.log('Invalid credentials!');
+        setDisplayInvalidCredentialsMessage(true);
+      }
+      console.log(response);
       // Empty input fields
       setUsername('');
       setPassword('');
@@ -77,16 +90,12 @@ export default function LoginForm() {
       setPasswordInputEntered(false);
     }
   };
-  const verifyCredentials = () => {
-    if (window.localStorage.getItem('Token')) {
-      console.log('There is a token stored in localStorage');
-    } else {
-      console.log('No token stored in localStorage!');
-    }
+  const hideInvalidCredentialsMessage = () => {
+    setDisplayInvalidCredentialsMessage(false);
   };
 
   return (
-    <Form method="post" onSubmit={formSubmissionHandler}>
+    <form onSubmit={formSubmissionHandler}>
       <div className={styles['input-wrapper']}>
         <label htmlFor="username">Username</label>
         <input
@@ -97,6 +106,7 @@ export default function LoginForm() {
           className={styles[usernameInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
+          onFocus={hideInvalidCredentialsMessage}
           value={username}
         />
         {displayUsernameInputErrorMessage && (
@@ -113,6 +123,7 @@ export default function LoginForm() {
           className={styles[passwordInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
+          onFocus={hideInvalidCredentialsMessage}
           value={password}
         />
         {displayPasswordInputErrorMessage && (
@@ -120,20 +131,19 @@ export default function LoginForm() {
             Password should be at least 8 characters long!
           </p>
         )}
+        {displayInvalidCredentialsMessage && (
+          <p className={styles.error}>Invalid credentials!</p>
+        )}
       </div>
       <div className={styles['input-remember']}>
         <input type="checkbox" id="remember-me" />
         <label htmlFor="remember-me">Remember me</label>
       </div>
       {!loggedIn && (
-        <button
-          className={styles['sign-in-button']}
-          disabled={!formIsValid}
-          onClick={() => dispatch(login())}
-        >
+        <button className={styles['sign-in-button']} disabled={!formIsValid}>
           Sign In
         </button>
       )}
-    </Form>
+    </form>
   );
 }
