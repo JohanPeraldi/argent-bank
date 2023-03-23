@@ -5,9 +5,10 @@ import { Provider } from 'react-redux';
 import App from './App';
 import { store } from './app/store';
 import ErrorPage from './routes/ErrorPage/ErrorPage';
-import Login, { action as loginAction } from './routes/Login/Login';
+import Login from './routes/Login/Login';
 import Profile from './routes/Profile/Profile';
 import Root from './routes/Root/Root';
+// import { checkAuthenticationLoader } from './utils/authentication';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -23,11 +24,11 @@ const router = createBrowserRouter([
       {
         path: 'login',
         element: <Login />,
-        action: loginAction,
       },
       {
         path: 'profile',
         element: <Profile />, // protéger cette route <Authentification><Profile /></Authentification>
+        // loader: checkAuthenticationLoader,
       },
     ],
   },
