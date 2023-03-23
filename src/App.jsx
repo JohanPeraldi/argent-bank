@@ -7,6 +7,7 @@ import securityIcon from './img/icon-security.png';
 import styles from './App.module.css';
 
 function App() {
+  // Update page title
   useEffect(() => {
     document.title = 'Argent Bank - Home Page';
   }, []);
