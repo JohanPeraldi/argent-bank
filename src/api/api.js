@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function sendCredentials(userCredentials) {
+export async function sendCredentials(userCredentials) {
   let data = JSON.stringify(userCredentials);
   let config = {
     method: 'post',
@@ -21,8 +21,8 @@ export function sendCredentials(userCredentials) {
     });
 }
 
-export function getUserData() {
-  const token = JSON.parse(window.localStorage.getItem('token'));
+export async function getUserData() {
+  const token = window.localStorage.getItem('token');
   if (token) {
     const auth = `Bearer ${token}`;
     let config = {
@@ -32,6 +32,35 @@ export function getUserData() {
       headers: {
         Authorization: auth,
       },
+    };
+
+    return axios
+      .request(config)
+      .then((response) => {
+        console.log(response.data.body);
+        return response.data.body;
+      })
+      .catch((error) => {
+        console.log(error.response);
+        return error.response;
+      });
+  } else {
+    console.log('No token found!');
+  }
+}
+
+export async function updateDetails(data) {
+  const token = window.localStorage.getItem('token');
+  if (token) {
+    const auth = `Bearer ${token}`;
+    let config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `${process.env.REACT_APP_BASE_URL}/user/profile`,
+      headers: {
+        Authorization: auth,
+      },
+      data: data,
     };
 
     return axios

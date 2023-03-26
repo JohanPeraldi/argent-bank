@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { getUserData } from '../../api/api';
 import Account from '../../components/Account/Account';
+import EditUsernameForm from '../../components/EditUsernameForm/EditUsernameForm';
 import { accounts } from '../../data/accounts';
+import { open } from '../../features/editMode/editModeSlice';
 import { login } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
+  const [firstName, setFirstName] = useState(null);
+  const [lastName, setLastName] = useState(null);
   const [username, setUsername] = useState(null);
+  const editing = useSelector((state) => state.editMode.editing);
   const dispatch = useDispatch();
   // Update page title
   useEffect(() => {
@@ -18,9 +23,16 @@ export default function Profile() {
     async function fetchData() {
       try {
         const { firstName, lastName } = await getUserData();
+        setFirstName(firstName);
+        setLastName(lastName);
         setUsername(`${firstName} ${lastName}`);
-        if (username) {
+        if (firstName && lastName) {
+          window.localStorage.setItem('username', username);
           dispatch(login());
+        } else {
+          console.group('No username found!');
+          console.log('username: ', username);
+          console.groupEnd();
         }
       } catch (error) {
         console.log(error);
@@ -28,6 +40,9 @@ export default function Profile() {
     }
     fetchData();
   }, [dispatch, username]);
+  function handleClickOnEditNameButton() {
+    dispatch(open());
+  }
 
   return (
     <main className="main bg-dark">
@@ -39,7 +54,16 @@ export default function Profile() {
               <br />
               {username}!
             </h1>
-            <button className={styles['edit-button']}>Edit Name</button>
+            <button
+              type="button"
+              className={styles['edit-button']}
+              onClick={handleClickOnEditNameButton}
+            >
+              Edit Name
+            </button>
+            {editing && (
+              <EditUsernameForm firstName={firstName} lastName={lastName} />
+            )}
           </div>
           <h2 className="sr-only">Accounts</h2>
           {accounts.map((account) => (

@@ -72,7 +72,7 @@ export default function LoginForm() {
       });
       if (response.status === 200) {
         const { token } = response.data.body;
-        window.localStorage.setItem('token', JSON.stringify(token));
+        window.localStorage.setItem('token', token);
         console.log('Token: ', token);
         dispatch(login());
         navigate('/profile');

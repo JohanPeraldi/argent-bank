@@ -1,0 +1,33 @@
+form {
+  margin-top: 2rem;
+}
+
+.input-wrapper,
+.button-wrapper {
+  display: flex;
+  justify-content: center;
+  column-gap: 1rem;
+}
+
+.input-wrapper input {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border: 2px solid #c6d2db;
+  border-radius: 5px;
+}
+
+.input-wrapper input::placeholder {
+  color: #c6d2db;
+}
+
+.button-cancel,
+.button-save {
+  padding: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #6558f6;
+  border: 1px solid #6558f6;
+  border-radius: 5px;
+  width: 8rem;
+}
