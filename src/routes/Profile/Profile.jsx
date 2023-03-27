@@ -9,9 +9,9 @@ import { login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
-  const [firstName, setFirstName] = useState(null);
-  const [lastName, setLastName] = useState(null);
-  const [username, setUsername] = useState(null);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [username, setUsername] = useState('');
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const editing = useSelector((state) => state.editMode.editing);
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ export default function Profile() {
       {loggedIn && (
         <>
           <div className={styles.header}>
-            <h1>Welcome back{firstName && `, ${firstName}`}!</h1>
+            {firstName && <h1>Welcome back {firstName}!</h1>}
             <button
               type="button"
               className={styles['edit-button']}
