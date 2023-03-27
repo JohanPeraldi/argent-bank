@@ -8,7 +8,7 @@ import ErrorPage from './routes/ErrorPage/ErrorPage';
 import Login from './routes/Login/Login';
 import Profile from './routes/Profile/Profile';
 import Root from './routes/Root/Root';
-// import { checkAuthenticationLoader } from './utils/authentication';
+import Authentication from './utils/Authentication';
 import './index.css';
 
 const router = createBrowserRouter([
@@ -27,8 +27,11 @@ const router = createBrowserRouter([
       },
       {
         path: 'profile',
-        element: <Profile />, // protéger cette route <Authentification><Profile /></Authentification>
-        // loader: checkAuthenticationLoader,
+        element: (
+          <Authentication>
+            <Profile />
+          </Authentication>
+        ),
       },
     ],
   },

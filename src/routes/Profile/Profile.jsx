@@ -5,7 +5,7 @@ import Account from '../../components/Account/Account';
 import EditUsernameForm from '../../components/EditUsernameForm/EditUsernameForm';
 import { accounts } from '../../data/accounts';
 import { open } from '../../features/editMode/editModeSlice';
-import { login } from '../../features/login/loginSlice';
+import { login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
@@ -33,6 +33,7 @@ export default function Profile() {
           console.group('No username found!');
           console.log('username: ', username);
           console.groupEnd();
+          dispatch(logout());
         }
       } catch (error) {
         console.log(error);
