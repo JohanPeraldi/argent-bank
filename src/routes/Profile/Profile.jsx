@@ -4,7 +4,7 @@ import { getUserData } from '../../api/api';
 import Account from '../../components/Account/Account';
 import EditUsernameForm from '../../components/EditUsernameForm/EditUsernameForm';
 import { accounts } from '../../data/accounts';
-import { open } from '../../features/editMode/editModeSlice';
+import { open, close } from '../../features/editMode/editModeSlice';
 import { login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
@@ -12,6 +12,7 @@ export default function Profile() {
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
   const [username, setUsername] = useState(null);
+  const loggedIn = useSelector((state) => state.login.loggedIn);
   const editing = useSelector((state) => state.editMode.editing);
   const dispatch = useDispatch();
   // Update page title
@@ -44,17 +45,17 @@ export default function Profile() {
   function handleClickOnEditNameButton() {
     dispatch(open());
   }
+  function handleUsernameChange(newUsername) {
+    setUsername(newUsername);
+    window.localStorage.setItem('username', newUsername);
+  }
 
   return (
     <main className="main bg-dark">
-      {username && (
+      {loggedIn && (
         <>
           <div className={styles.header}>
-            <h1>
-              Welcome back
-              <br />
-              {username}!
-            </h1>
+            <h1>Welcome back{firstName && `, ${firstName}`}!</h1>
             <button
               type="button"
               className={styles['edit-button']}
@@ -63,7 +64,12 @@ export default function Profile() {
               Edit Name
             </button>
             {editing && (
-              <EditUsernameForm firstName={firstName} lastName={lastName} />
+              <EditUsernameForm
+                firstName={firstName}
+                lastName={lastName}
+                onCloseEditMode={() => dispatch(close())}
+                onUsernameChange={handleUsernameChange}
+              />
             )}
           </div>
           <h2 className="sr-only">Accounts</h2>
@@ -77,7 +83,7 @@ export default function Profile() {
           ))}
         </>
       )}
-      {!username && (
+      {!loggedIn && (
         <div className={styles.header}>
           <h1>You are not logged in!</h1>
         </div>

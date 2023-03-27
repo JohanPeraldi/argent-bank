@@ -13,9 +13,11 @@ export default function EditUsernameForm(props) {
     dispatch(close());
   }
   function inputChangeHandler(event) {
-    event.target.id === 'firstName'
-      ? setEditedFirstName(event.target.value)
-      : setEditedLastName(event.target.value);
+    if (event.target.id === 'firstName') {
+      setEditedFirstName(event.target.value);
+    } else if (event.target.id === 'lastName') {
+      setEditedLastName(event.target.value);
+    }
     console.group('Initial name');
     console.log('firstName: ', firstName);
     console.log('lastName: ', lastName);
@@ -28,8 +30,13 @@ export default function EditUsernameForm(props) {
   }
   function inputFocusHandler(event) {
     // On focus, empty field
-    event.target.placeholder = '';
-    event.target.value = '';
+    if (event.target.id === 'firstName') {
+      setEditedFirstName('');
+      event.target.placeholder = firstName;
+    } else if (event.target.id === 'lastName') {
+      setEditedLastName('');
+      event.target.placeholder = lastName;
+    }
   }
   function inputBlurHandler(event) {
     if (event.target.id === 'firstName') {
@@ -37,14 +44,13 @@ export default function EditUsernameForm(props) {
       if (editedFirstName === '') {
         setEditedFirstName(firstName);
       }
-      event.target.placeholder = editedFirstName;
-    }
-    if (event.target.id === 'lastName') {
+      event.target.placeholder = firstName;
+    } else if (event.target.id === 'lastName') {
       // On blur, if field is empty, restore initial value
       if (editedLastName === '') {
         setEditedLastName(lastName);
       }
-      event.target.placeholder = editedLastName;
+      event.target.placeholder = lastName;
     }
   }
   async function formSubmissionHandler(event) {
@@ -66,6 +72,12 @@ export default function EditUsernameForm(props) {
     const updatedNames = await updateDetails(data);
     console.log('Updated names: ', updatedNames);
     dispatch(close());
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      const newUsername = `${newFirstName} ${newLastName}`;
+      window.localStorage.setItem('username', newUsername);
+      props.onUsernameChange(newUsername);
+    }
   }
 
   return (
@@ -78,8 +90,8 @@ export default function EditUsernameForm(props) {
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
           onFocus={inputFocusHandler}
-          // placeholder={firstName}
           value={editedFirstName}
+          required
         />
         <input
           type="text"
@@ -88,8 +100,8 @@ export default function EditUsernameForm(props) {
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
           onFocus={inputFocusHandler}
-          // placeholder={lastName}
           value={editedLastName}
+          required
         />
       </div>
       <div className={styles['button-wrapper']}>
