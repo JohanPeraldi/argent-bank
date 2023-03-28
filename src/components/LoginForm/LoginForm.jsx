@@ -63,8 +63,6 @@ export default function LoginForm() {
   const formSubmissionHandler = async (event) => {
     event.preventDefault();
     if (formIsValid) {
-      console.log('Username: ', username);
-      console.log('Password: ', password);
       // API call with user's entered credentials
       const response = await sendCredentials({
         email: username,
@@ -73,15 +71,12 @@ export default function LoginForm() {
       if (response.status === 200) {
         const { token } = response.data.body;
         window.localStorage.setItem('token', token);
-        console.log('Token: ', token);
         dispatch(login());
         navigate('/profile');
       }
       if (response.status === 400) {
-        console.log('Invalid credentials!');
         setDisplayInvalidCredentialsMessage(true);
       }
-      console.log(response);
       // Empty input fields
       setUsername('');
       setPassword('');

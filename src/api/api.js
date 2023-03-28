@@ -45,13 +45,11 @@ export async function getUserData() {
         return error.response;
       });
   } else {
-    console.log('No token found!');
     // If the token is not found (has been deleted by user)
     // but that a username value can be found in localStorage,
     // return object with username (this will cause user to be
     // logged out and redirected to login page)
     const username = window.localStorage.getItem('username');
-    console.log('username from localStorage: ', username);
     return {
       username: username,
     };
@@ -82,7 +80,5 @@ export async function updateDetails(data) {
         console.log(error.response);
         return error.response;
       });
-  } else {
-    console.log('No token found!');
   }
 }

@@ -31,9 +31,6 @@ export default function Profile() {
           window.localStorage.setItem('username', username);
           dispatch(login());
         } else {
-          console.group('No username found!');
-          console.log('username: ', username);
-          console.groupEnd();
           dispatch(logout());
         }
       } catch (error) {

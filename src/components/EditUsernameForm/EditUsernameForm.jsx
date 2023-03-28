@@ -18,15 +18,6 @@ export default function EditUsernameForm(props) {
     } else if (event.target.id === 'lastName') {
       setEditedLastName(event.target.value);
     }
-    console.group('Initial name');
-    console.log('firstName: ', firstName);
-    console.log('lastName: ', lastName);
-    console.groupEnd();
-    console.group('After editing');
-    console.log('Edited first name: ', editedFirstName);
-    console.log('Edited last name: ', editedLastName);
-    console.log('event.target.value: ', event.target.value);
-    console.groupEnd();
   }
   function inputFocusHandler(event) {
     // On focus, empty field
