@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendCredentials } from '../../api/api';
@@ -9,12 +9,23 @@ export default function LoginForm() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // If a valid token is found in localStorage, log user in and navigate to Profile page
+  useEffect(() => {
+    const token = window.localStorage.getItem('token');
+    if (token) {
+      dispatch(login());
+      navigate('/profile');
+    }
+  }, [dispatch, navigate]);
   // Username and password values
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   // Have input fields been entered and exited by user (blur event)?
   const [usernameInputEntered, setUsernameInputEntered] = useState(false);
   const [passwordInputEntered, setPasswordInputEntered] = useState(false);
+  // Remember me functionality to allow user to be automatically
+  // logged in if his credentials are stored in localStorage
+  const [rememberMe, setRememberMe] = useState(false);
   // Validity of username and password values (only reject empty field for username
   // and passwords with less than 8 characters, but may be further restricted)
   const usernameIsValid = username.trim() !== '';
@@ -70,7 +81,9 @@ export default function LoginForm() {
       });
       if (response.status === 200) {
         const { token } = response.data.body;
-        window.localStorage.setItem('token', token);
+        if (rememberMe) {
+          window.localStorage.setItem('token', token);
+        }
         dispatch(login());
         navigate('/profile');
       }
@@ -87,6 +100,9 @@ export default function LoginForm() {
   };
   const hideInvalidCredentialsMessage = () => {
     setDisplayInvalidCredentialsMessage(false);
+  };
+  const rememberMeHandler = (event) => {
+    setRememberMe(event.target.checked);
   };
 
   return (
@@ -131,7 +147,7 @@ export default function LoginForm() {
         )}
       </div>
       <div className={styles['input-remember']}>
-        <input type="checkbox" id="remember-me" />
+        <input type="checkbox" id="remember-me" onChange={rememberMeHandler} />
         <label htmlFor="remember-me">Remember me</label>
       </div>
       {!loggedIn && (
