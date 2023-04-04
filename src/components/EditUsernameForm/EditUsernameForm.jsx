@@ -63,11 +63,11 @@ export default function EditUsernameForm(props) {
     const updatedNames = await updateDetails(data);
     console.log('Updated names: ', updatedNames);
     dispatch(close());
-    const token = window.localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) {
-      const newUsername = `${newFirstName} ${newLastName}`;
-      window.localStorage.setItem('username', newUsername);
-      props.onUsernameChange(newUsername);
+      // const newUsername = `${newFirstName} ${newLastName}`;
+      localStorage.setItem('firstName', newFirstName);
+      props.onUsernameChange(newFirstName);
     }
   }
 

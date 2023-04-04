@@ -8,7 +8,7 @@ import ErrorPage from './routes/ErrorPage/ErrorPage';
 import Login from './routes/Login/Login';
 import Profile from './routes/Profile/Profile';
 import Root from './routes/Root/Root';
-import Authentication from './utils/Authentication';
+import Authentication from './components/Authentication/Authentication';
 import './index.css';
 
 const router = createBrowserRouter([

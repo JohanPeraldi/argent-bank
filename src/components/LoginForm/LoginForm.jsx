@@ -3,26 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendCredentials } from '../../api/api';
 import { login } from '../../features/login/loginSlice';
+import { toggle } from '../../features/rememberMe/rememberMeSlice';
 import styles from './LoginForm.module.css';
 
 export default function LoginForm() {
   const loggedIn = useSelector((state) => state.login.loggedIn);
+  const rememberMe = useSelector((state) => state.rememberMe.rememberMe);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // Username and password values
-  const [username, setUsername] = useState('');
+  // Get email from localStorage
+  const emailFromLocalStorage = localStorage.getItem('email');
+  // Email and password values (in case Remember me checkbox was previously checked,
+  // the user's email will have been stored in localStorage, in which case we give
+  // email the value of emailFromLocalStorage)
+  const [email, setEmail] = useState(emailFromLocalStorage || '');
   const [password, setPassword] = useState('');
   // Have input fields been entered and exited by user (blur event)?
-  const [usernameInputEntered, setUsernameInputEntered] = useState(false);
+  const [emailInputEntered, setEmailInputEntered] = useState(false);
   const [passwordInputEntered, setPasswordInputEntered] = useState(false);
-  // Validity of username and password values (only reject empty field for username
+  // Validity of email and password values (only reject empty field for email
   // and passwords with less than 8 characters, but may be further restricted)
-  const usernameIsValid = username.trim() !== '';
+  const emailIsValid = email.trim() !== '';
   const passwordIsValid = password.trim().length > 7;
   // Error message should only be displayed if input box has received
   // and lost focus (blur event) without user providing a valid value
-  const displayUsernameInputErrorMessage =
-    !usernameIsValid && usernameInputEntered;
+  const displayEmailInputErrorMessage = !emailIsValid && emailInputEntered;
   const displayPasswordInputErrorMessage =
     !passwordIsValid && passwordInputEntered;
   // Invalid credentials error message
@@ -32,7 +37,7 @@ export default function LoginForm() {
   ] = useState(false);
   // Dynamic className depending on both input validity
   // and input field being entered and left (blur event)
-  const usernameInputClassName = displayUsernameInputErrorMessage
+  const emailInputClassName = displayEmailInputErrorMessage
     ? 'input-invalid'
     : '';
   const passwordInputClassName = displayPasswordInputErrorMessage
@@ -40,21 +45,21 @@ export default function LoginForm() {
     : '';
   // Form validity (false by default, true if both inputs are valid)
   let formIsValid = false;
-  if (usernameIsValid && passwordIsValid) {
+  if (emailIsValid && passwordIsValid) {
     formIsValid = true;
   }
   // Event handler functions
   const inputChangeHandler = (event) => {
-    if (event.target.type === 'text') {
-      setUsername(event.target.value);
+    if (event.target.type === 'email') {
+      setEmail(event.target.value);
     }
     if (event.target.type === 'password') {
       setPassword(event.target.value);
     }
   };
   const inputBlurHandler = (event) => {
-    if (event.target.type === 'text') {
-      setUsernameInputEntered(true);
+    if (event.target.type === 'email') {
+      setEmailInputEntered(true);
     }
     if (event.target.type === 'password') {
       setPasswordInputEntered(true);
@@ -65,12 +70,19 @@ export default function LoginForm() {
     if (formIsValid) {
       // API call with user's entered credentials
       const response = await sendCredentials({
-        email: username,
+        email: email,
         password: password,
       });
       if (response.status === 200) {
         const { token } = response.data.body;
-        window.localStorage.setItem('token', token);
+        localStorage.setItem('token', token);
+        // If rememberMe is true, it means that the checkbox is checked,
+        // in which case we want to store the user's email in localStorage
+        // in order to retrieve it when later visiting the login page
+        // and save the user from typing it again
+        if (rememberMe) {
+          localStorage.setItem('email', email);
+        }
         dispatch(login());
         navigate('/profile');
       }
@@ -78,33 +90,36 @@ export default function LoginForm() {
         setDisplayInvalidCredentialsMessage(true);
       }
       // Empty input fields
-      setUsername('');
+      setEmail('');
       setPassword('');
       // Reset user interaction history with input fields (back to false)
-      setUsernameInputEntered(false);
+      setEmailInputEntered(false);
       setPasswordInputEntered(false);
     }
   };
   const hideInvalidCredentialsMessage = () => {
     setDisplayInvalidCredentialsMessage(false);
   };
+  const checkboxStateHandler = () => {
+    dispatch(toggle());
+  };
 
   return (
     <form onSubmit={formSubmissionHandler}>
       <div className={styles['input-wrapper']}>
-        <label htmlFor="username">Username</label>
+        <label htmlFor="email">Username</label>
         <input
-          type="text"
-          id="username"
-          name="username"
+          type="email"
+          id="email"
+          name="email"
           required
-          className={styles[usernameInputClassName]}
+          className={styles[emailInputClassName]}
           onBlur={inputBlurHandler}
           onChange={inputChangeHandler}
           onFocus={hideInvalidCredentialsMessage}
-          value={username}
+          value={email}
         />
-        {displayUsernameInputErrorMessage && (
+        {displayEmailInputErrorMessage && (
           <p className={styles.error}>Username field cannot be empty!</p>
         )}
       </div>
@@ -131,7 +146,29 @@ export default function LoginForm() {
         )}
       </div>
       <div className={styles['input-remember']}>
-        <input type="checkbox" id="remember-me" />
+        {/* If no email has been stored in localStorage, it means that
+        the "Remember me" checkbox was not previously checked and so
+        the checkbox must remain unchecked and no email value can
+        be prefilled */}
+        {/* {!emailFromLocalStorage && ( */}
+        <input
+          type="checkbox"
+          id="remember-me"
+          onChange={checkboxStateHandler}
+        />
+        {/* )} */}
+        {/* On the contrary, if an email has been stored in localStorage, it means that
+        the "Remember me" checkbox was previously checked and so
+        the checkbox must remain checked and the email value found in localStorage
+        will be used to prefill the "Username" input field */}
+        {/* {emailFromLocalStorage && (
+          <input
+            type="checkbox"
+            id="remember-me"
+            onChange={checkboxStateHandler}
+            checked
+          />
+        )} */}
         <label htmlFor="remember-me">Remember me</label>
       </div>
       {!loggedIn && (

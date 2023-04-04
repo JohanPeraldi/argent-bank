@@ -5,13 +5,22 @@ import Account from '../../components/Account/Account';
 import EditUsernameForm from '../../components/EditUsernameForm/EditUsernameForm';
 import { accounts } from '../../data/accounts';
 import { open, close } from '../../features/editMode/editModeSlice';
-import { login, logout } from '../../features/login/loginSlice';
+// import { login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
+  // Get token and firstName from localStorage
+  // and, if found, automatically log user in
+  const tokenFromLocalStorage = localStorage.getItem('token');
+  const firstNameFromLocalStorage = localStorage.getItem('firstName');
+  console.group('From localStorage');
+  console.log('token: ', tokenFromLocalStorage);
+  console.log('firstName: ', firstNameFromLocalStorage);
+  console.groupEnd();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [username, setUsername] = useState('');
+  // const [username, setUsername] = useState('');
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const editing = useSelector((state) => state.editMode.editing);
   const dispatch = useDispatch();
@@ -19,32 +28,32 @@ export default function Profile() {
   useEffect(() => {
     document.title = 'Argent Bank - Profile';
   }, []);
-  // Get username
+  // Get firstName
   useEffect(() => {
     async function fetchData() {
       try {
         const { firstName, lastName } = await getUserData();
         setFirstName(firstName);
         setLastName(lastName);
-        setUsername(`${firstName} ${lastName}`);
-        if (firstName && lastName) {
-          window.localStorage.setItem('username', username);
+        // setUsername(`${firstName} ${lastName}`);
+        /* if (firstName && lastName) {
+          localStorage.setItem('username', username);
           dispatch(login());
         } else {
           dispatch(logout());
-        }
+        } */
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, [dispatch, username]);
+  }, [dispatch, firstName, lastName]);
   function handleClickOnEditNameButton() {
     dispatch(open());
   }
-  function handleUsernameChange(newUsername) {
-    setUsername(newUsername);
-    window.localStorage.setItem('username', newUsername);
+  function handleUsernameChange(newFirstName) {
+    setFirstName(newFirstName);
+    localStorage.setItem('firstName', newFirstName);
   }
 
   return (

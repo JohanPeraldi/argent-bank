@@ -13,8 +13,8 @@ export const loginSlice = createSlice({
     },
     logout: (state) => {
       state.loggedIn = false;
-      window.localStorage.removeItem('token');
-      window.localStorage.removeItem('username');
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
     },
   },
 });
