@@ -36,3 +36,15 @@
   max-width: 100%;
   width: 200px;
 }
+
+/* Styles for the Sign in / Sign out button &
+username & icon displayed if user is logged in */
+.nav-right {
+  display: flex;
+  column-gap: 2rem;
+  font-weight: bold;
+}
+
+.username {
+  margin-left: 0.5rem;
+}
