@@ -11,6 +11,15 @@ export default function LoginForm() {
   const rememberMe = useSelector((state) => state.rememberMe.rememberMe);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  // Keep track of the checkbox's state
+  const [isChecked, setIsChecked] = useState(undefined);
+  console.log('Checkbox is checked: ', isChecked);
+  // Update Redux state to match checkbox's state
+  useEffect(() => {
+    if (isChecked !== rememberMe) {
+      dispatch(toggle());
+    }
+  }, [dispatch, isChecked, rememberMe]);
   // Get email from localStorage
   const emailFromLocalStorage = localStorage.getItem('email');
   // Email and password values (in case Remember me checkbox was previously checked,
@@ -101,7 +110,8 @@ export default function LoginForm() {
   const hideInvalidCredentialsMessage = () => {
     setDisplayInvalidCredentialsMessage(false);
   };
-  const checkboxStateHandler = () => {
+  const checkboxStateHandler = (event) => {
+    setIsChecked(event.target.checked);
     dispatch(toggle());
   };
 
@@ -161,8 +171,10 @@ export default function LoginForm() {
         {/* On the contrary, if an email has been stored in localStorage, it means that
         the "Remember me" checkbox was previously checked and so
         the checkbox must remain checked and the email value found in localStorage
-        will be used to prefill the "Username" input field */}
-        {/* {emailFromLocalStorage && (
+        will be used to prefill the "Username" input field.
+        The following, however, will result in the checkbox being
+        ALWAYS checked!!!
+        {emailFromLocalStorage && (
           <input
             type="checkbox"
             id="remember-me"

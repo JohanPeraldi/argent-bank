@@ -61,15 +61,12 @@ export default function EditUsernameForm(props) {
       firstName: newFirstName,
       lastName: newLastName,
     };
-    const updatedNames = await updateDetails(data);
-    console.log('Updated names: ', updatedNames);
+    updateDetails(data);
     // Update names in Redux store and close edit mode
     dispatch(fetchUser());
     dispatch(close());
     const token = localStorage.getItem('token');
     if (token) {
-      // const newUsername = `${newFirstName} ${newLastName}`;
-      localStorage.setItem('firstName', newFirstName);
       props.onUsernameChange(newFirstName);
     }
   }

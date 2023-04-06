@@ -37,7 +37,6 @@ export async function getUserData() {
     return axios
       .request(config)
       .then((response) => {
-        console.log(response.data.body);
         return response.data.body;
       })
       .catch((error) => {
@@ -46,12 +45,12 @@ export async function getUserData() {
       });
   } else {
     // If the token is not found (has been deleted by user)
-    // but that a firstName value can be found in localStorage,
-    // return object with firstName (this will cause user to be
+    // but that a username value can be found in localStorage,
+    // return object with username (this will cause user to be
     // logged out and redirected to login page)
     const username = localStorage.getItem('username');
     return {
-      firstName: firstName,
+      username: username,
     };
   }
 }
@@ -73,7 +72,6 @@ export async function updateDetails(data) {
     return axios
       .request(config)
       .then((response) => {
-        console.log(response.data.body);
         return response.data.body;
       })
       .catch((error) => {

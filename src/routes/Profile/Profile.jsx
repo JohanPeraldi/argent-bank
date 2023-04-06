@@ -9,18 +9,9 @@ import { fetchUser, login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
-  // Get token and firstName from localStorage
-  // and, if found, automatically log user in
-  const tokenFromLocalStorage = localStorage.getItem('token');
-  const firstNameFromLocalStorage = localStorage.getItem('firstName');
-  console.group('From localStorage');
-  console.log('token: ', tokenFromLocalStorage);
-  console.log('firstName: ', firstNameFromLocalStorage);
-  console.groupEnd();
-
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  // const [username, setUsername] = useState('');
+  const [username, setUsername] = useState('');
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const editing = useSelector((state) => state.editMode.editing);
   const dispatch = useDispatch();
@@ -35,26 +26,24 @@ export default function Profile() {
         const { firstName, lastName } = await getUserData();
         setFirstName(firstName);
         setLastName(lastName);
-        // setUsername(`${firstName} ${lastName}`);
-        /* if (firstName && lastName) {
-          localStorage.setItem('username', username);
+        setUsername(`${firstName} ${lastName}`);
+        if (firstName && lastName) {
           dispatch(login());
           dispatch(fetchUser());
         } else {
           dispatch(logout());
-        } */
+        }
       } catch (error) {
         console.log(error);
       }
     }
     fetchData();
-  }, [dispatch, firstName, lastName]);
+  }, [dispatch, firstName, lastName, username]);
   function handleClickOnEditNameButton() {
     dispatch(open());
   }
   function handleUsernameChange(newFirstName) {
     setFirstName(newFirstName);
-    localStorage.setItem('firstName', newFirstName);
   }
 
   return (

@@ -19,7 +19,6 @@ function App() {
   // Get user data if user is logged in
   useEffect(() => {
     if (loggedIn) {
-      console.log('Logged in!');
       dispatch(fetchUser());
     }
   }, [dispatch, loggedIn]);

@@ -11,10 +11,6 @@ const initialState = {
 
 export const fetchUser = createAsyncThunk('login/fetchUser', async () => {
   const response = await getUserData();
-  console.group('From fetchUser in loginSlice.js');
-  console.log('response', response);
-  console.log('response.firstName', response.firstName);
-  console.groupEnd();
   return response;
 });
 
