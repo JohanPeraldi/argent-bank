@@ -22,7 +22,7 @@ export async function sendCredentials(userCredentials) {
 }
 
 export async function getUserData() {
-  const token = window.localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   if (token) {
     const auth = `Bearer ${token}`;
     let config = {
@@ -49,7 +49,7 @@ export async function getUserData() {
     // but that a username value can be found in localStorage,
     // return object with username (this will cause user to be
     // logged out and redirected to login page)
-    const username = window.localStorage.getItem('username');
+    const username = localStorage.getItem('username');
     return {
       username: username,
     };
@@ -57,7 +57,7 @@ export async function getUserData() {
 }
 
 export async function updateDetails(data) {
-  const token = window.localStorage.getItem('token');
+  const token = localStorage.getItem('token');
   if (token) {
     const auth = `Bearer ${token}`;
     let config = {

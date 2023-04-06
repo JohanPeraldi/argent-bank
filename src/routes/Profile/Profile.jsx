@@ -5,7 +5,7 @@ import Account from '../../components/Account/Account';
 import EditUsernameForm from '../../components/EditUsernameForm/EditUsernameForm';
 import { accounts } from '../../data/accounts';
 import { open, close } from '../../features/editMode/editModeSlice';
-import { login, logout } from '../../features/login/loginSlice';
+import { fetchUser, login, logout } from '../../features/login/loginSlice';
 import styles from './Profile.module.css';
 
 export default function Profile() {
@@ -30,6 +30,7 @@ export default function Profile() {
         if (firstName && lastName) {
           window.localStorage.setItem('username', username);
           dispatch(login());
+          dispatch(fetchUser());
         } else {
           dispatch(logout());
         }

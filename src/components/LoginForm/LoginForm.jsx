@@ -69,8 +69,9 @@ export default function LoginForm() {
         password: password,
       });
       if (response.status === 200) {
+        // Get token from API response and store it in localStorage
         const { token } = response.data.body;
-        window.localStorage.setItem('token', token);
+        localStorage.setItem('token', token);
         dispatch(login());
         navigate('/profile');
       }

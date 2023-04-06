@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Feature from './components/Feature/Feature';
 import Hero from './components/Hero/Hero';
+import { fetchUser } from './features/login/loginSlice';
 import chatIcon from './img/icon-chat.png';
 import moneyIcon from './img/icon-money.png';
 import securityIcon from './img/icon-security.png';
@@ -11,6 +13,17 @@ function App() {
   useEffect(() => {
     document.title = 'Argent Bank - Home Page';
   }, []);
+
+  const loggedIn = useSelector((state) => state.login.loggedIn);
+  const dispatch = useDispatch();
+  // Get user data if user is logged in
+  useEffect(() => {
+    if (loggedIn) {
+      console.log('Logged in!');
+      dispatch(fetchUser());
+    }
+  }, [dispatch, loggedIn]);
+
   const firstFeatureText =
     'Need to talk to a representative? You can get in touch through our 24/7 chat or through a phone call in less than 5 minutes.';
   const firstFeatureTitle = 'You are our #1 priority';
