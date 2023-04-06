@@ -6,6 +6,7 @@ import logo from '../../img/argentBankLogo.png';
 import styles from './Navigation.module.css';
 
 export default function Navigation() {
+  const firstName = useSelector((state) => state.login.firstName);
   const loggedIn = useSelector((state) => state.login.loggedIn);
   const dispatch = useDispatch();
 
@@ -19,7 +20,7 @@ export default function Navigation() {
         />
         <h1 className="sr-only">Argent Bank</h1>
       </Link>
-      <div>
+      <div className={styles['nav-right']}>
         {!loggedIn && (
           <Link to="login" className={styles['main-nav-item']}>
             <i className="fa fa-user-circle"></i>
@@ -27,14 +28,20 @@ export default function Navigation() {
           </Link>
         )}
         {loggedIn && (
-          <Link
-            to="/"
-            className={styles['main-nav-item']}
-            onClick={() => dispatch(logout())}
-          >
-            <i className="fa fa-sign-out"></i>
-            Sign Out
-          </Link>
+          <>
+            <div>
+              <i className="fa fa-user-circle-o"></i>
+              <span className={styles.username}>{firstName}</span>
+            </div>
+            <Link
+              to="/"
+              className={styles['main-nav-item']}
+              onClick={() => dispatch(logout())}
+            >
+              <i className="fa fa-sign-out"></i>
+              Sign Out
+            </Link>
+          </>
         )}
       </div>
     </nav>

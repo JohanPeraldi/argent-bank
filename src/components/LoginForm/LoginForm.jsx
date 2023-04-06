@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendCredentials } from '../../api/api';
@@ -74,6 +74,7 @@ export default function LoginForm() {
         password: password,
       });
       if (response.status === 200) {
+        // Get token from API response and store it in localStorage
         const { token } = response.data.body;
         localStorage.setItem('token', token);
         // If rememberMe is true, it means that the checkbox is checked,

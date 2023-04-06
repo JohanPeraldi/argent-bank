@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { updateDetails } from '../../api/api';
 import { close } from '../../features/editMode/editModeSlice';
+import { fetchUser } from '../../features/login/loginSlice';
 import styles from './EditUsernameForm.module.css';
 
 export default function EditUsernameForm(props) {
@@ -62,6 +63,8 @@ export default function EditUsernameForm(props) {
     };
     const updatedNames = await updateDetails(data);
     console.log('Updated names: ', updatedNames);
+    // Update names in Redux store and close edit mode
+    dispatch(fetchUser());
     dispatch(close());
     const token = localStorage.getItem('token');
     if (token) {

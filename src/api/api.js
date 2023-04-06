@@ -49,7 +49,7 @@ export async function getUserData() {
     // but that a firstName value can be found in localStorage,
     // return object with firstName (this will cause user to be
     // logged out and redirected to login page)
-    const firstName = localStorage.getItem('firstName');
+    const username = localStorage.getItem('username');
     return {
       firstName: firstName,
     };
