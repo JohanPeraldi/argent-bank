@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { sendCredentials } from '../../api/api';
@@ -12,14 +12,7 @@ export default function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   // Keep track of the checkbox's state
-  const [isChecked, setIsChecked] = useState(undefined);
-  console.log('Checkbox is checked: ', isChecked);
-  // Update Redux state to match checkbox's state
-  useEffect(() => {
-    if (isChecked !== rememberMe) {
-      dispatch(toggle());
-    }
-  }, [dispatch, isChecked, rememberMe]);
+  const [isChecked, setIsChecked] = useState(rememberMe);
   // Get email from localStorage
   const emailFromLocalStorage = localStorage.getItem('email');
   // Email and password values (in case Remember me checkbox was previously checked,
@@ -157,31 +150,12 @@ export default function LoginForm() {
         )}
       </div>
       <div className={styles['input-remember']}>
-        {/* If no email has been stored in localStorage, it means that
-        the "Remember me" checkbox was not previously checked and so
-        the checkbox must remain unchecked and no email value can
-        be prefilled */}
-        {/* {!emailFromLocalStorage && ( */}
         <input
           type="checkbox"
           id="remember-me"
           onChange={checkboxStateHandler}
+          checked={isChecked}
         />
-        {/* )} */}
-        {/* On the contrary, if an email has been stored in localStorage, it means that
-        the "Remember me" checkbox was previously checked and so
-        the checkbox must remain checked and the email value found in localStorage
-        will be used to prefill the "Username" input field.
-        The following, however, will result in the checkbox being
-        ALWAYS checked!!!
-        {emailFromLocalStorage && (
-          <input
-            type="checkbox"
-            id="remember-me"
-            onChange={checkboxStateHandler}
-            checked
-          />
-        )} */}
         <label htmlFor="remember-me">Remember me</label>
       </div>
       {!loggedIn && (
