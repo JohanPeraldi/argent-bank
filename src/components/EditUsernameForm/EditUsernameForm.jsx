@@ -48,15 +48,14 @@ export default function EditUsernameForm(props) {
   async function formSubmissionHandler(event) {
     event.preventDefault();
     // Create variables to store new names
-    let newFirstName = firstName;
-    let newLastName = lastName;
+    let newFirstName, newLastName;
     // Update names if modified
-    if (editedFirstName !== firstName) {
-      newFirstName = editedFirstName;
-    }
-    if (editedLastName !== lastName) {
-      newLastName = editedLastName;
-    }
+    editedFirstName !== firstName
+      ? (newFirstName = editedFirstName)
+      : (newFirstName = firstName);
+    editedLastName !== lastName
+      ? (newLastName = editedLastName)
+      : (newLastName = lastName);
     let data = {
       firstName: newFirstName,
       lastName: newLastName,
