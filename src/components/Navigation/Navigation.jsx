@@ -22,20 +22,26 @@ export default function Navigation() {
       </Link>
       <div className={styles['nav-right']}>
         {!loggedIn && (
-          <Link to="login" className={styles['main-nav-item']}>
+          <Link
+            to="login"
+            className={`${styles['main-nav-item']} ${styles['login-link']}`}
+          >
             <i className="fa fa-user-circle"></i>
             Sign In
           </Link>
         )}
         {loggedIn && (
           <>
-            <div>
+            <Link
+              to="/profile"
+              className={`${styles['main-nav-item']} ${styles['profile-link']}`}
+            >
               <i className="fa fa-user-circle-o"></i>
               <span className={styles.username}>{firstName}</span>
-            </div>
+            </Link>
             <Link
               to="/"
-              className={styles['main-nav-item']}
+              className={`${styles['main-nav-item']} ${styles['logout-link']}`}
               onClick={() => dispatch(logout())}
             >
               <i className="fa fa-sign-out"></i>

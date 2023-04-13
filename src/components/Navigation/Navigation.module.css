@@ -18,7 +18,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 6rem;
   text-decoration: none;
   margin-right: 0.5rem;
 }
@@ -42,9 +41,17 @@ username & icon displayed if user is logged in */
 .nav-right {
   display: flex;
   column-gap: 2rem;
-  font-weight: bold;
 }
 
 .username {
   margin-left: 0.5rem;
+}
+
+.login-link,
+.logout-link {
+  width: 6rem;
+}
+
+.profile-link {
+  width: 4rem;
 }
