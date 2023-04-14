@@ -71,10 +71,10 @@ export default function Profile() {
           <h2 className="sr-only">Accounts</h2>
           {accounts.map((account) => (
             <Account
-              key={account[0]}
-              title={account[1]}
-              balance={account[2]}
-              description={account[3]}
+              key={account.key}
+              title={account.title}
+              balance={account.balance}
+              description={account.description}
             />
           ))}
         </>
