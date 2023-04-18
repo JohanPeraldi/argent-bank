@@ -1,11 +1,10 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 export default function Authentication({ children }) {
-  const isAuthenticated = useSelector((state) => state.login.loggedIn);
+  const token = localStorage.getItem('token');
 
-  if (isAuthenticated) {
+  if (token) {
     return children;
   }
 
